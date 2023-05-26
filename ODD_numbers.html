@@ -1,0 +1,83 @@
+/**
+ *
+ * Brief : javascript program that gives the number of prime numbers in RANGE (1,10^7) in which every pair of consecutive digits have the difference 1(ODD numbers).
+ * date : 26th may, 2023
+ * author : B Uha Madhuri
+ *
+ *
+ **/
+
+
+<script>
+/**
+ * function check_odd -> checks if every pair of consecutive digits in the number have the difference 1 or not(ODD numbers). 
+ * @param {prime integer} num -> The prime number passed to check if it satisfies condition or not.
+ * @return {boolean} flag -> True if above condition is satisfied, else false
+**/
+function check_odd(num) 
+ {
+    let flag = true; //initialize flag to true
+    /** 
+     * run while loop once for checking if 2 consecutive digits have difference 1.
+     * exit loop if num is single digit number
+     **/
+    while (num > 9) 
+    {
+      const re = num % 10;
+      num = Math.floor(num / 10);
+      const re1 = num % 10;
+      if (Math.abs(re1 - re) !== 1) 
+      {
+        flag = false;
+        break;
+      }
+    }
+    return flag;
+ }
+/**
+ * function generate_primes -> generates all prime numbers between 1 and given MAX_LIMIT, using 'seive of eratosthenes' concept.
+ * @param {integer} n -> The MAX-LIMIT.
+ * @return {array} primes -> array of generated prime numbers.
+**/
+  
+  function generate_primes(n)
+  {
+  const is_prime = [false, false, ...Array(n - 1).fill(true)]; //0,1 are not primes so put false and for numbers after them, consider true.
+  const primes = [2]; // add '2' to list of primes.
+    //declare all multiples of 2 as non prime numbers , i.e make their positions false.
+    for (let j = 4; j <= n; j += 2) 
+    {
+      is_prime[j] = false; 
+    }
+    //declare all multiples of 3 as non prime numbers , i.e make their positions false.
+    for (let i = 3; i <= n; i += 2) 
+    {
+      if (is_prime[i]) 
+      {
+        primes.push(i);
+        for (let j = i * i; j <= n; j += i) 
+        {
+          is_prime[j] = false;
+        }
+      }
+    }
+    return primes
+  }
+/** 
+ * main driver code
+ **/
+const MAX_LIMIT = 10000 //declaring MAX-LIMIT value
+let count = 0//count variable is the number of ODD numbers, initially zero.
+
+let primes = []
+primes = generate_primes(MAX_LIMIT) 
+
+for (const num of primes) //iterating through the list of prime numbers and checking if they are ODD numbers or not.
+  {
+    if (check_odd(num)) //function call to the function 'check_odd'
+    {
+      count += 1;//if return value is true, i.e, it is a ODD number, then increment count.
+    }
+  }
+  console.log(count) //print total number of prime ODD numbers.
+  </script>
